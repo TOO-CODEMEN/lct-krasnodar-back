@@ -13,12 +13,10 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     Task findByName(String name);
 
-//    Task save(Task task);
-
     Task deleteTaskById(Long id);
 
     List<Task> findAll();
 
-//    Task updateTaskById(Long id, Task task);
     List<Task> findTaskByUserId(Long id);
+
 }

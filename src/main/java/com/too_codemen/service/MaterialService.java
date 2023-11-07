@@ -34,4 +34,23 @@ public class MaterialService {
     public List<Material> getAllMaterials() {
         return materialRepository.findAll();
     }
+
+    public Material updateMaterial(Long id, Material updatedMaterial) {
+        Material existingMaterial = materialRepository.findById(id).orElse(null);
+
+        if (updatedMaterial.getName() != null) {
+            existingMaterial.setName(updatedMaterial.getName());
+        }
+        if (updatedMaterial.getDescription() != null) {
+            existingMaterial.setDescription(updatedMaterial.getDescription());
+        }
+        if (updatedMaterial.getAudience() != null) {
+            existingMaterial.setAudience(updatedMaterial.getAudience());
+        }
+        if (updatedMaterial.getLink() != null) {
+            existingMaterial.setLink(updatedMaterial.getLink());
+        }
+
+        return materialRepository.save(existingMaterial);
+    }
 }

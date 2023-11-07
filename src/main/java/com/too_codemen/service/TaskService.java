@@ -32,4 +32,22 @@ public class TaskService {
     public List<Task> getTaskByUserId(Long id) {
         return taskRepository.findTaskByUserId(id);
     }
+
+    public Task updateTask(Long id, Task updatedTask) {
+        Task existingTask = taskRepository.findById(id).orElse(null);
+        if (updatedTask.getName() != null) {
+            existingTask.setName(updatedTask.getName());
+        }
+        if (updatedTask.getDescription() != null) {
+            existingTask.setDescription(updatedTask.getDescription());
+        }
+        if (updatedTask.getStatus() != null) {
+            existingTask.setStatus(updatedTask.getStatus());
+        }
+        if (updatedTask.getDeadline() != null) {
+            existingTask.setDeadline(updatedTask.getDeadline());
+        }
+
+        return taskRepository.save(existingTask);
+    }
 }

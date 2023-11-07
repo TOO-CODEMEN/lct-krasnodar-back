@@ -37,4 +37,9 @@ public class TaskController {
     public List<Task> getTaskByUserId(@PathVariable Long id) {
         return taskService.getTaskByUserId(id);
     }
+
+    @PatchMapping("/updateTask/{id}")
+    public Task updateTask(@PathVariable Long id, @RequestBody Task task) {
+        return taskService.updateTask(id, task);
+    }
 }
