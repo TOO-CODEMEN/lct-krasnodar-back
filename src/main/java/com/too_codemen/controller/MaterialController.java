@@ -14,8 +14,6 @@ public class MaterialController {
     @Autowired
     private MaterialService materialService;
 
-    @Autowired
-    private DataSource dataSource;
     @GetMapping("/getMaterialById/{id}")
     public Material getMaterialById(@PathVariable Long id) {
         return materialService.getMaterialById(id);
@@ -39,5 +37,10 @@ public class MaterialController {
     @GetMapping("/getAllMaterials")
     public List<Material> getAllMaterials() {
         return materialService.getAllMaterials();
+    }
+
+    @PatchMapping("/updateMaterial/{id}")
+    public Material updateMaterial(@PathVariable Long id, @RequestBody Material material) {
+        return materialService.updateMaterial(id, material);
     }
 }

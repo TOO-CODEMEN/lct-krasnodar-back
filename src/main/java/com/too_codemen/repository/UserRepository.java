@@ -19,6 +19,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findAll();
 
-//    User updateUserById(Long id, User user);
-
 }

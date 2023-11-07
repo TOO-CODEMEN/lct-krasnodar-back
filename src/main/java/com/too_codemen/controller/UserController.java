@@ -33,4 +33,8 @@ public class UserController {
         return userService.showUserInfo(email);
     }
 
+    @PatchMapping("/updateUser/{id}")
+    public User updateUser(@PathVariable Long id, @RequestBody User user) {
+        return userService.updateUser(id, user);
+    }
 }
