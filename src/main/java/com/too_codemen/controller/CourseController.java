@@ -27,10 +27,6 @@ public class CourseController {
 
     @PostMapping("/saveCourse")
     public Course saveCourse(@RequestBody Course course) {
-        System.out.println(course);
-        System.out.println(course.getStartTime());
-        System.out.println(course.getFinishTime());
-        System.out.println(course.getDeadline());
         return courseService.saveCourse(course);
     }
 
