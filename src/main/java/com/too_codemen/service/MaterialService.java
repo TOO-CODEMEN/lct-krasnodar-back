@@ -47,6 +47,9 @@ public class MaterialService {
         if (updatedMaterial.getAudience() != null) {
             existingMaterial.setAudience(updatedMaterial.getAudience());
         }
+        if (updatedMaterial.getYandexFormsLink() != null) {
+            existingMaterial.setYandexFormsLink(updatedMaterial.getYandexFormsLink());
+        }
         if (updatedMaterial.getLink() != null) {
             existingMaterial.setLink(updatedMaterial.getLink());
         }
