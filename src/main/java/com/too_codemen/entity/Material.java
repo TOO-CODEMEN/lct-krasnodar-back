@@ -22,6 +22,9 @@ public class Material {
     @Column(name = "audience")
     private String audience;
 
+    @Column(name = "yandex_forms_link")
+    private String yandexFormsLink;
+
     @Column(name = "link")
     private String link;
 }
