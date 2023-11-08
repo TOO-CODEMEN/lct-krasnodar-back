@@ -19,4 +19,6 @@ public interface MaterialRepository extends JpaRepository<Material, Long> {
 
     List<Material> findAll();
 
+    void deleteMaterialByCourseId(Long id);
+
 }
