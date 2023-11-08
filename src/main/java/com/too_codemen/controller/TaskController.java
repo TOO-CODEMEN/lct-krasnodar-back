@@ -33,9 +33,9 @@ public class TaskController {
         return taskService.getAllTasks();
     }
 
-    @GetMapping("/getTaskByUserId/{id}")
+    @GetMapping("/getTasksByUserId/{id}")
     public List<Task> getTaskByUserId(@PathVariable Long id) {
-        return taskService.getTaskByUserId(id);
+        return taskService.getTasksByUserId(id);
     }
 
     @PatchMapping("/updateTask/{id}")

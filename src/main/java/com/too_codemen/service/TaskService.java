@@ -29,7 +29,7 @@ public class TaskService {
         return taskRepository.findAll();
     }
 
-    public List<Task> getTaskByUserId(Long id) {
+    public List<Task> getTasksByUserId(Long id) {
         return taskRepository.findTaskByUserId(id);
     }
 
