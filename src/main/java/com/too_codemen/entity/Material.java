@@ -27,4 +27,9 @@ public class Material {
 
     @Column(name = "link")
     private String link;
+
+    @ManyToOne
+    @JoinColumn(name = "course_id")
+    private Course course;
+
 }
