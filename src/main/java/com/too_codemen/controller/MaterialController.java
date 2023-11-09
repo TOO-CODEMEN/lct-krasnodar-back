@@ -30,8 +30,8 @@ public class MaterialController {
     }
 
     @DeleteMapping("/deleteMaterialById/{id}")
-    public Material deleteMaterialById(@PathVariable Long id) {
-        return materialService.deleteMaterialById(id);
+    public void deleteMaterialById(@PathVariable Long id) {
+        materialService.deleteMaterialById(id);
     }
 
     @GetMapping("/getAllMaterials")

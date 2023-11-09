@@ -30,8 +30,8 @@ public class MaterialService {
     }
 
     @Transactional
-    public Material deleteMaterialById(Long id) {
-        return materialRepository.deleteMaterialById(id);
+    public void deleteMaterialById(Long id) {
+        materialRepository.deleteMaterialById(id);
     }
 
     public List<Material> getAllMaterials() {

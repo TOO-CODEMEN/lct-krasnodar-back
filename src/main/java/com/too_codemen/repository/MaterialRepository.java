@@ -15,7 +15,7 @@ public interface MaterialRepository extends JpaRepository<Material, Long> {
 
     Material save(Material material);
 
-    Material deleteMaterialById(Long id);
+    void deleteMaterialById(Long id);
 
     List<Material> findAll();
 
