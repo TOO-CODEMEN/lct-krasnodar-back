@@ -1,5 +1,6 @@
 package com.too_codemen.repository;
 
+import com.too_codemen.entity.Material;
 import com.too_codemen.entity.Task;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -22,4 +23,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     void deleteTasksByUserId(Long id);
 
     void deleteTaskByCourseId(Long id);
+
+    List<Task> findTaskByCourseId(Long id);
+
 }

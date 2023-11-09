@@ -13,6 +13,10 @@ public class TaskService {
     @Autowired
     private TaskRepository taskRepository;
 
+    public List<Task> getTasksByCourseId(Long id) {
+        return taskRepository.findTaskByCourseId(id);
+    }
+
     public Task save(Task task) {
         return taskRepository.save(task);
     }
@@ -47,7 +51,10 @@ public class TaskService {
         if (updatedTask.getDeadline() != null) {
             existingTask.setDeadline(updatedTask.getDeadline());
         }
-
+        if (updatedTask.getCourse() != null) {
+            existingTask.setCourse(updatedTask.getCourse());
+        }
         return taskRepository.save(existingTask);
     }
+
 }

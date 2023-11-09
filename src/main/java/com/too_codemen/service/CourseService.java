@@ -1,12 +1,16 @@
 package com.too_codemen.service;
 
 import com.too_codemen.entity.Course;
+import com.too_codemen.entity.Material;
+import com.too_codemen.entity.Task;
 import com.too_codemen.repository.CourseRepository;
 import com.too_codemen.repository.MaterialRepository;
 import com.too_codemen.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
@@ -31,9 +35,43 @@ public class CourseService {
         return courseRepository.findByName(name);
     }
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Transactional
     public Course saveCourse(Course course) {
-        return courseRepository.save(course);
+        courseRepository.saveAndFlush(course);
+
+        // Обновление материалов
+        for (Material material : course.getMaterials()) {
+            updateMaterialCourseId(material.getId(), course.getId());
+        }
+
+        // Обновление задач
+        for (Task task : course.getTasks()) {
+            updateTaskCourseId(task.getId(), course.getId());
+        }
+
+        System.out.println("Returning course");
+        return course;
     }
+
+    private void updateMaterialCourseId(Long materialId, Long courseId) {
+        String updateQuery = "UPDATE Material SET course_id = :courseId WHERE material_id = :materialId";
+        entityManager.createQuery(updateQuery)
+                .setParameter("courseId", courseId)
+                .setParameter("materialId", materialId)
+                .executeUpdate();
+    }
+
+    private void updateTaskCourseId(Long taskId, Long courseId) {
+        String updateQuery = "UPDATE Task SET course_id = :courseId WHERE task_id = :taskId";
+        entityManager.createQuery(updateQuery)
+                .setParameter("courseId", courseId)
+                .setParameter("taskId", taskId)
+                .executeUpdate();
+    }
+
 
     @Transactional
     public void deleteCourseById(Long id) {
