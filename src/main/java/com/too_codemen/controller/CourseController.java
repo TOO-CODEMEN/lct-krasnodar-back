@@ -28,9 +28,6 @@ public class CourseController {
 
     @PostMapping("/saveCourse")
     public Course saveCourse(@RequestBody CourseRequest course) {
-        System.out.println(course);
-        System.out.println(course.getMaterials());
-        System.out.println(course.getTasks());
         return courseService.saveCourse(course);
     }
 
