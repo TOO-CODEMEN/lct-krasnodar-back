@@ -43,4 +43,9 @@ public class MaterialController {
     public Material updateMaterial(@PathVariable Long id, @RequestBody Material material) {
         return materialService.updateMaterial(id, material);
     }
+
+    @GetMapping("/getMaterialsByCourseId/{id}")
+    public List<Material> getMaterialsByCourseId(@PathVariable Long id) {
+        return materialService.getMaterialsByCourseId(id);
+    }
 }

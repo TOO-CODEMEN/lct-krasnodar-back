@@ -73,6 +73,8 @@ public class UserService implements UserDetailsService {
             existingUser.setPatronymic(updatedUser.getPatronymic());
         }
         if (updatedUser.getPassword() != null) {
+            String encodedPassword = passwordEncoder.encode(updatedUser.getPassword());
+            updatedUser.setPassword(encodedPassword);
             existingUser.setPassword(updatedUser.getPassword());
         }
         if (updatedUser.getPosition() != null) {

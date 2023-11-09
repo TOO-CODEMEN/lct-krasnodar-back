@@ -15,6 +15,10 @@ public class MaterialService {
     @Autowired
     private MaterialRepository materialRepository;
 
+    public List<Material> getMaterialsByCourseId(Long id) {
+        return materialRepository.findMaterialByCourseId(id);
+    }
+
     public Material getMaterialById(Long id) {
         return materialRepository.findMaterialById(id);
     }
@@ -53,7 +57,10 @@ public class MaterialService {
         if (updatedMaterial.getLink() != null) {
             existingMaterial.setLink(updatedMaterial.getLink());
         }
-
+        if (updatedMaterial.getCourse() != null) {
+            existingMaterial.setCourse(updatedMaterial.getCourse());
+        }
         return materialRepository.save(existingMaterial);
     }
+
 }

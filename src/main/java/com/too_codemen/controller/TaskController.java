@@ -42,4 +42,9 @@ public class TaskController {
     public Task updateTask(@PathVariable Long id, @RequestBody Task task) {
         return taskService.updateTask(id, task);
     }
+
+    @GetMapping("/getTasksByCourseId/{id}")
+    public List<Task> getTasksByCourseId(@PathVariable Long id) {
+        return taskService.getTasksByCourseId(id);
+    }
 }
