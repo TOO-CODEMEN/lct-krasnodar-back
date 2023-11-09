@@ -3,6 +3,7 @@ package com.too_codemen.service;
 import com.too_codemen.entity.Course;
 import com.too_codemen.entity.Material;
 import com.too_codemen.entity.Task;
+import com.too_codemen.model.CourseRequest;
 import com.too_codemen.repository.CourseRepository;
 import com.too_codemen.repository.MaterialRepository;
 import com.too_codemen.repository.TaskRepository;
@@ -38,9 +39,19 @@ public class CourseService {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Transactional
-    public Course saveCourse(Course course) {
-        courseRepository.saveAndFlush(course);
+        @Transactional
+    public Course saveCourse(CourseRequest courseRequest) {
+        Course course = new Course();
+        course.setName(courseRequest.getName());
+        course.setMaterials(courseRequest.getMaterials());
+        course.setTasks(courseRequest.getTasks());
+        course.setUser(courseRequest.getUser());
+        course.setStartTime(courseRequest.getStartTime());
+        course.setFinishTime(courseRequest.getFinishTime());
+        course.setDeadline(courseRequest.getDeadline());
+        course.setStatus(courseRequest.getStatus());
+        course.setAudience(courseRequest.getAudience());
+        courseRepository.save(course);
 
         // Обновление материалов
         for (Material material : course.getMaterials()) {
@@ -55,6 +66,28 @@ public class CourseService {
         System.out.println("Returning course");
         return course;
     }
+//    @Transactional
+//    public Course saveCourse(Course course) {
+//        Course savedCourse = courseRepository.save(course);
+//
+//        // Обновление материалов
+//        if (course.getMaterials() != null) {
+//            for (Material material : course.getMaterials()) {
+//                updateMaterialCourseId(material.getId(), savedCourse.getId());
+//            }
+//        }
+//
+//        // Обновление задач
+//        if (course.getTasks() != null) {
+//            for (Task task : course.getTasks()) {
+//                updateTaskCourseId(task.getId(), savedCourse.getId());
+//            }
+//        }
+//
+//        System.out.println("Returning course");
+//        return savedCourse;
+//    }
+
 
     private void updateMaterialCourseId(Long materialId, Long courseId) {
         String updateQuery = "UPDATE Material SET course_id = :courseId WHERE material_id = :materialId";
@@ -81,7 +114,7 @@ public class CourseService {
     }
 
     public List<Course> getAllCourses() {
-        return courseRepository.findAll();
+        return courseRepository.findAllWithMaterialsAndTasks();
     }
 
     public List<Course> getCoursesByUserId(Long id) {
