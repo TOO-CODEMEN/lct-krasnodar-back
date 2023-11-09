@@ -40,7 +40,7 @@ public class CourseService {
 
     @Transactional
     public Course saveCourse(Course course) {
-        courseRepository.saveAndFlush(course);
+        courseRepository.save(course);
 
         // Обновление материалов
         for (Material material : course.getMaterials()) {
@@ -81,7 +81,7 @@ public class CourseService {
     }
 
     public List<Course> getAllCourses() {
-        return courseRepository.findAll();
+        return courseRepository.findAllWithMaterialsAndTasks();
     }
 
     public List<Course> getCoursesByUserId(Long id) {

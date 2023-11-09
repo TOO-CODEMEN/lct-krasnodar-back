@@ -1,5 +1,6 @@
 package com.too_codemen.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -19,10 +20,12 @@ public class Course {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "course", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "course")
+    @JsonIgnore
     private Set<Material> materials;
 
-    @OneToMany(mappedBy = "course", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "course")
+    @JsonIgnore
     private List<Task> tasks;
 
     @ManyToOne

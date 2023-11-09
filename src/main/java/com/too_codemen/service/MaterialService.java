@@ -4,9 +4,7 @@ import com.too_codemen.entity.Material;
 import com.too_codemen.repository.MaterialRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -16,7 +14,7 @@ public class MaterialService {
     private MaterialRepository materialRepository;
 
     public List<Material> getMaterialsByCourseId(Long id) {
-        return materialRepository.findMaterialByCourseId(id);
+        return materialRepository.findByCourseId(id);
     }
 
     public Material getMaterialById(Long id) {
@@ -31,6 +29,7 @@ public class MaterialService {
         return materialRepository.save(material);
     }
 
+    @Transactional
     public Material deleteMaterialById(Long id) {
         return materialRepository.deleteMaterialById(id);
     }
