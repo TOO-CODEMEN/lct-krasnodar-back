@@ -1,6 +1,7 @@
 package com.too_codemen.controller;
 
 import com.too_codemen.entity.Course;
+import com.too_codemen.model.CourseRequest;
 import com.too_codemen.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,10 @@ public class CourseController {
     }
 
     @PostMapping("/saveCourse")
-    public Course saveCourse(@RequestBody Course course) {
+    public Course saveCourse(@RequestBody CourseRequest course) {
+        System.out.println(course);
+        System.out.println(course.getMaterials());
+        System.out.println(course.getTasks());
         return courseService.saveCourse(course);
     }
 
