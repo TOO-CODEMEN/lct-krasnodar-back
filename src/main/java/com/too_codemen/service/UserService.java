@@ -31,6 +31,9 @@ public class UserService implements UserDetailsService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Autowired
+    private EmailService emailService;
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email);
@@ -44,6 +47,7 @@ public class UserService implements UserDetailsService {
 
 
     public User saveUser(User user) {
+        emailService.sendNotification(user.getEmail(), "Ваши данные для входа", "Ваш логин: " + user.getEmail() + " Ваш пароль: " + user.getPassword());
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
         return userRepository.save(user);

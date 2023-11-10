@@ -1,7 +1,9 @@
 package com.too_codemen.service;
 
 import com.too_codemen.entity.Task;
+import com.too_codemen.entity.User;
 import com.too_codemen.repository.TaskRepository;
+import com.too_codemen.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +16,20 @@ public class TaskService {
     @Autowired
     private TaskRepository taskRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private EmailService emailService;
+
     public List<Task> getTasksByCourseId(Long id) {
         return taskRepository.findTaskByCourseId(id);
     }
 
     public Task save(Task task) {
+        User user = userRepository.findById(task.getUser().getId()).orElse(null);
+        emailService.sendNotification(user.getEmail(), "Вам добавили новую задачу",
+                "Вам добавили новую задачу '" + task.getName() + "' Успейте пройти до " + task.getDeadline());
         return taskRepository.save(task);
     }
 
