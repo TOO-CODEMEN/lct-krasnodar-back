@@ -1,5 +1,9 @@
 package com.too_codemen.entity;
 
-public enum Role {
+import org.springframework.security.core.GrantedAuthority;
+
+import java.util.Collection;
+
+public enum Role{
     USER, ADMIN
 }

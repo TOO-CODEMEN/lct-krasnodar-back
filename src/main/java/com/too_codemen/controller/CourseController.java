@@ -26,16 +26,6 @@ public class CourseController {
         return courseService.getCourseByName(name);
     }
 
-    @PostMapping("/saveCourse")
-    public Course saveCourse(@RequestBody CourseRequest course) {
-        return courseService.saveCourse(course);
-    }
-
-    @DeleteMapping("/deleteCourseById/{id}")
-    public void deleteCourseById(@PathVariable Long id) {
-        courseService.deleteCourseById(id);
-    }
-
     @GetMapping("/getAllCourses")
     public List<Course> getAllCourses() {
         return courseService.getAllCourses();

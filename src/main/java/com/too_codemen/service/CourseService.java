@@ -66,27 +66,7 @@ public class CourseService {
         System.out.println("Returning course");
         return course;
     }
-//    @Transactional
-//    public Course saveCourse(Course course) {
-//        Course savedCourse = courseRepository.save(course);
-//
-//        // Обновление материалов
-//        if (course.getMaterials() != null) {
-//            for (Material material : course.getMaterials()) {
-//                updateMaterialCourseId(material.getId(), savedCourse.getId());
-//            }
-//        }
-//
-//        // Обновление задач
-//        if (course.getTasks() != null) {
-//            for (Task task : course.getTasks()) {
-//                updateTaskCourseId(task.getId(), savedCourse.getId());
-//            }
-//        }
-//
-//        System.out.println("Returning course");
-//        return savedCourse;
-//    }
+
 
 
     private void updateMaterialCourseId(Long materialId, Long courseId) {
@@ -114,7 +94,7 @@ public class CourseService {
     }
 
     public List<Course> getAllCourses() {
-        return courseRepository.findAllWithMaterialsAndTasks();
+        return courseRepository.findAll();
     }
 
     public List<Course> getCoursesByUserId(Long id) {

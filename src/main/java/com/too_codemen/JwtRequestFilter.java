@@ -1,9 +1,11 @@
 package com.too_codemen;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -13,9 +15,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 
-public class JwtRequestFilter extends OncePerRequestFilter{
+
+public class JwtRequestFilter extends OncePerRequestFilter {
+
     private String jwtSecret = "yourSecretKey";
 
     @Override
@@ -29,18 +36,28 @@ public class JwtRequestFilter extends OncePerRequestFilter{
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwt = authorizationHeader.substring(7);
             try {
-                username = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(jwt).getBody().getSubject();
+                Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(jwt).getBody();
+                username = claims.getSubject();
+
+                if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                    // Извлекаем роли из токена
+                    List<GrantedAuthority> authorities = ((List<String>) claims.get("roles"))
+                            .stream()
+                            .map(SimpleGrantedAuthority::new)
+                            .collect(Collectors.toList());
+
+                    // Создание аутентификации с учетом ролей
+                    UsernamePasswordAuthenticationToken authenticationToken =
+                            new UsernamePasswordAuthenticationToken(username, null, authorities);
+
+                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                }
             } catch (ExpiredJwtException e) {
                 // Обработка истекшего токена
             }
         }
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            // Создание аутентификации, если пользователь успешно аутентифицирован
-            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                    new UsernamePasswordAuthenticationToken(username, null, new ArrayList<>());
-            SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-        }
         filterChain.doFilter(request, response);
     }
 }
+

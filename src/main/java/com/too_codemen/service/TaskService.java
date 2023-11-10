@@ -5,6 +5,7 @@ import com.too_codemen.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -21,8 +22,9 @@ public class TaskService {
         return taskRepository.save(task);
     }
 
-    public Task deleteTaskById(Long id) {
-        return taskRepository.deleteTaskById(id);
+    @Transactional
+    public void deleteTaskById(Long id) {
+        taskRepository.deleteTaskById(id);
     }
 
     public Task showTaskInfo(String name) {
