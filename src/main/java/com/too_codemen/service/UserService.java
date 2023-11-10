@@ -1,5 +1,6 @@
 package com.too_codemen.service;
 
+import com.too_codemen.CustomUserDetails;
 import com.too_codemen.entity.User;
 import com.too_codemen.repository.TaskRepository;
 import com.too_codemen.repository.UserRepository;
@@ -31,15 +32,16 @@ public class UserService implements UserDetailsService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(username);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email);
 
         if (user == null) {
-            throw new UsernameNotFoundException("User not found with email: " + username);
+            throw new UsernameNotFoundException("User not found with email: " + email);
         }
 
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), new ArrayList<>());
+        return new CustomUserDetails(user.getEmail(), user.getPassword(), user.getRole());
     }
+
 
     public User saveUser(User user) {
         String encodedPassword = passwordEncoder.encode(user.getPassword());

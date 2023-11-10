@@ -12,17 +12,6 @@ import java.util.List;
 public class TaskController {
     @Autowired
     private TaskService taskService;
-
-    @PostMapping("/saveTask")
-    public Task save(@RequestBody Task task) {
-        return taskService.save(task);
-    }
-
-    @DeleteMapping("/deleteTask/{id}")
-    public Task deleteTask(@PathVariable Long id) {
-        return taskService.deleteTaskById(id);
-    }
-
     @GetMapping("/showTaskInfo/{name}")
     public Task showTaskInfo(@PathVariable String name) {
         return taskService.showTaskInfo(name);

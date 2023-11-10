@@ -24,24 +24,9 @@ public class MaterialController {
         return materialService.getMaterialByName(name);
     }
 
-    @PostMapping("/saveMaterial")
-    public Material saveMaterial(@RequestBody Material material) {
-        return materialService.save(material);
-    }
-
-    @DeleteMapping("/deleteMaterialById/{id}")
-    public void deleteMaterialById(@PathVariable Long id) {
-        materialService.deleteMaterialById(id);
-    }
-
     @GetMapping("/getAllMaterials")
     public List<Material> getAllMaterials() {
         return materialService.getAllMaterials();
-    }
-
-    @PatchMapping("/updateMaterial/{id}")
-    public Material updateMaterial(@PathVariable Long id, @RequestBody Material material) {
-        return materialService.updateMaterial(id, material);
     }
 
     @GetMapping("/getMaterialsByCourseId/{id}")
