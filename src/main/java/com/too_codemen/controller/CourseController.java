@@ -1,8 +1,9 @@
 package com.too_codemen.controller;
 
+import com.too_codemen.notifiers.CourseDeadlineNotifier;
 import com.too_codemen.entity.Course;
-import com.too_codemen.model.CourseRequest;
 import com.too_codemen.service.CourseService;
+import com.too_codemen.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

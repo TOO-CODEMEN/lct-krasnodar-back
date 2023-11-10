@@ -3,10 +3,12 @@ package com.too_codemen.service;
 import com.too_codemen.entity.Course;
 import com.too_codemen.entity.Material;
 import com.too_codemen.entity.Task;
+import com.too_codemen.entity.User;
 import com.too_codemen.model.CourseRequest;
 import com.too_codemen.repository.CourseRepository;
 import com.too_codemen.repository.MaterialRepository;
 import com.too_codemen.repository.TaskRepository;
+import com.too_codemen.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +30,12 @@ public class CourseService {
     @Autowired
     private MaterialRepository materialRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private EmailService emailService;
+
     public Optional<Course> getCourseById(Long id) {
         return courseRepository.findById(id);
     }
@@ -39,7 +47,7 @@ public class CourseService {
     @PersistenceContext
     private EntityManager entityManager;
 
-        @Transactional
+    @Transactional
     public Course saveCourse(CourseRequest courseRequest) {
         Course course = new Course();
         course.setName(courseRequest.getName());
@@ -52,7 +60,9 @@ public class CourseService {
         course.setStatus(courseRequest.getStatus());
         course.setAudience(courseRequest.getAudience());
         courseRepository.save(course);
-
+        User user = userRepository.findById(courseRequest.getUser().getId()).orElse(null);
+        emailService.sendNotification(user.getEmail(), "Вам добавили новый курс",
+                "Вам добавили новый курс '" + course.getName() + "' Успейте пройти до " + course.getDeadline());
         // Обновление материалов
         for (Material material : course.getMaterials()) {
             updateMaterialCourseId(material.getId(), course.getId());
@@ -66,7 +76,6 @@ public class CourseService {
         System.out.println("Returning course");
         return course;
     }
-
 
 
     private void updateMaterialCourseId(Long materialId, Long courseId) {
