@@ -63,7 +63,7 @@ public class TaskService {
             existingTask.setDescription(updatedTask.getDescription());
         }
         if (updatedTask.getStatus() != null) {
-            if (existingTask.getStatus() == true) {
+            if (updatedTask.getStatus() == true) {
                 emailService.sendNotification(existingTask.getUser().getCurator().getEmail(),
                         "Пользователь завершил задание", "Пользователь " + existingTask.getUser().getName() +
                                 " завершил задание " + existingTask.getName());
