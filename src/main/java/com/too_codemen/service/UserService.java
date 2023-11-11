@@ -116,6 +116,12 @@ public class UserService implements UserDetailsService {
         if (updatedUser.getFinishTime() != null) {
             existingUser.setFinishTime(updatedUser.getFinishTime());
         }
+        if (updatedUser.getCompletedTasks() != 0) {
+            existingUser.setCompletedTasks(updatedUser.getCompletedTasks());
+        }
+        if (updatedUser.getFailedTasks() != 0) {
+            existingUser.setFailedTasks(updatedUser.getFailedTasks());
+        }
 
         return userRepository.save(existingUser);
     }
