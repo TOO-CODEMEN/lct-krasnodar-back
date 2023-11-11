@@ -19,4 +19,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findAll();
 
+    User findUserByCuratorId(Long id);
+
+    List<User> findUsersByCuratorId(Long id);
 }

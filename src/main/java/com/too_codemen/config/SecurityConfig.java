@@ -38,7 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         jwtRequestFilter = new JwtRequestFilter();
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/authenticate", "/api/**").permitAll()
+                .antMatchers("/api/authenticate").permitAll()
                 .antMatchers("/api/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
