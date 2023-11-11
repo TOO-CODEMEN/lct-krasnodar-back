@@ -41,13 +41,14 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email);
+        Curator curator = curatorRepository.findByEmail(email);
 
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found with email: " + email);
+        if (curator == null) {
+            User user = userRepository.findByEmail(email);
+            return new CustomUserDetails(user.getEmail(), user.getPassword(), user.getRole());
         }
 
-        return new CustomUserDetails(user.getEmail(), user.getPassword(), user.getRole());
+        return new CustomUserDetails(curator.getEmail(), curator.getPassword(), curator.getRole());
     }
 
 
