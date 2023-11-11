@@ -39,6 +39,38 @@ public class CourseDeadlineNotifier {
         }
     }
 
+    @Scheduled(fixedRate = 43200)
+    public void finishCourse() {
+        List<Course> courses = courseService.getAllCourses();
+        for (Course course : courses) {
+            if (course.getStatus() == false) {
+                if (isCourseDeadline(course.getDeadline())) {
+                    emailService.sendNotification(course.getUser().getEmail(), "Курс завершен",
+                            "Дедлайн для курса '" + course.getName() + "' прошел.");
+                    Instant currentTime = Instant.now();
+                    course.setFinishTime(Timestamp.from(currentTime));
+                    course.setStatus(true);
+                    courseService.updateCourse(course.getId(), course);
+                }
+            }
+
+        }
+    }
+
+    private boolean isCourseDeadline(Timestamp deadline) {
+        Instant currentTime = Instant.now();
+
+        Instant deadlineInstant = deadline.toInstant();
+
+        Duration duration = Duration.between(currentTime, deadlineInstant);
+
+        if (duration.getSeconds() <= 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     private boolean isCourseDeadlineApproaching(Timestamp deadline) {
         Instant currentTime = Instant.now();
 

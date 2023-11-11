@@ -28,12 +28,42 @@ public class TaskDeadlineNotifier {
         List<Task> tasks = taskService.getAllTasks();
         for (Task task : tasks) {
             if (task.getStatus() == false) {
-                if (isTaskDeadlineApproaching(task.getDeadline())) {
+                if (isTaskDeadline(task.getDeadline())) {
                     emailService.sendNotification(task.getUser().getEmail(), "Приближается дедлайн задачи",
                             "Дедлайн для задачи '" + task.getName() + "' приближается.");
                 }
             }
 
+        }
+    }
+
+    @Scheduled(fixedRate = 43200)
+    public void finishTask() {
+        List<Task> tasks = taskService.getAllTasks();
+        for (Task task : tasks) {
+            if (task.getStatus() == false) {
+                if (isTaskDeadlineApproaching(task.getDeadline())) {
+                    emailService.sendNotification(task.getUser().getEmail(), "Задание завершено",
+                            "Дедлайн для задания '" + task.getName() + "' прошел.");
+                    task.setStatus(true);
+                    taskService.updateTask(task.getId(), task);
+                }
+            }
+
+        }
+    }
+
+    private boolean isTaskDeadline(Timestamp deadline) {
+        Instant currentTime = Instant.now();
+
+        Instant deadlineInstant = deadline.toInstant();
+
+        Duration duration = Duration.between(currentTime, deadlineInstant);
+
+        if (duration.getSeconds() <= 0) {
+            return true;
+        } else {
+            return false;
         }
     }
 
