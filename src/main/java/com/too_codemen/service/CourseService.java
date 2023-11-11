@@ -9,6 +9,7 @@ import com.too_codemen.repository.CourseRepository;
 import com.too_codemen.repository.MaterialRepository;
 import com.too_codemen.repository.TaskRepository;
 import com.too_codemen.repository.UserRepository;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -72,8 +73,6 @@ public class CourseService {
         for (Task task : course.getTasks()) {
             updateTaskCourseId(task.getId(), course.getId());
         }
-
-        System.out.println("Returning course");
         return course;
     }
 

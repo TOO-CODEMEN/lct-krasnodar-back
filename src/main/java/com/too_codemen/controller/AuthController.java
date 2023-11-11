@@ -6,6 +6,7 @@ import com.too_codemen.repository.CuratorRepository;
 import com.too_codemen.repository.UserRepository;
 import com.too_codemen.service.JwtTokenUtil;
 import com.too_codemen.service.UserService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -35,6 +36,8 @@ public class AuthController {
     @Autowired
     private CuratorRepository curatorRepository;
 
+    private final static Logger log = Logger.getLogger(AuthController.class);
+
     @PostMapping("/authenticate")
     public AuthResult createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
         authenticate(authenticationRequest.getEmail(), authenticationRequest.getPassword());
@@ -42,6 +45,7 @@ public class AuthController {
         final String token = jwtTokenUtil.generateToken(userDetails);
         AuthResult authResult = new AuthResult();
         authResult.setToken(token);
+        log.info("Пользователь " + authenticationRequest.getEmail() + " вошел в систему");
         return authResult;
     }
     private void authenticate(String email, String password) throws Exception {
