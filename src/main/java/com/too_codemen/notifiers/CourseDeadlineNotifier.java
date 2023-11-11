@@ -56,7 +56,7 @@ public class CourseDeadlineNotifier {
                     course.setFinishTime(Timestamp.from(currentTime));
                     course.setStatus(true);
                     User user = course.getUser();
-                    int existingFailedTasks = user.getFailedTasks() + 1;
+                    Long existingFailedTasks = user.getFailedTasks() + 1;
                     user.setFailedTasks(existingFailedTasks);
                     userService.updateUser(user.getId(), user);
                     courseService.updateCourse(course.getId(), course);

@@ -53,7 +53,7 @@ public class TaskDeadlineNotifier {
                                 "Дедлайн для задания '" + task.getName() + "' прошел.");
                         task.setStatus(true);
                         User user = task.getUser();
-                        int existingFailedTasks = user.getFailedTasks() + 1;
+                        Long existingFailedTasks = user.getFailedTasks() + 1;
                         user.setFailedTasks(existingFailedTasks);
                         userService.updateUser(user.getId(), user);
                         taskService.updateTask(task.getId(), task);
@@ -74,7 +74,7 @@ public class TaskDeadlineNotifier {
                                 "Дедлайн для задания '" + task.getName() + "' прошел.");
                         task.setStatus(true);
                         User user = task.getCourse().getUser();
-                        int existingFailedTasks = user.getFailedTasks() + 1;
+                        Long existingFailedTasks = user.getFailedTasks() + 1;
                         user.setFailedTasks(existingFailedTasks);
                         userService.updateUser(user.getId(), user);
                         taskService.updateTask(task.getId(), task);
