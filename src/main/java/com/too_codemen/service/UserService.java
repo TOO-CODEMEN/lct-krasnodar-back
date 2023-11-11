@@ -2,6 +2,7 @@ package com.too_codemen.service;
 
 import com.too_codemen.CustomUserDetails;
 import com.too_codemen.entity.Curator;
+import com.too_codemen.entity.Role;
 import com.too_codemen.entity.User;
 import com.too_codemen.repository.CuratorRepository;
 import com.too_codemen.repository.TaskRepository;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +41,8 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private EntityManager entityManager;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -63,10 +67,24 @@ public class UserService implements UserDetailsService {
         return userRepository.save(user);
     }
 
-//    @Transactional
-    public void deleteUserById(Long id) {
-        userRepository.deleteById(id);
+    @Transactional
+    public void deleteUserById(Long userId) {
+        // Получаем пользователя из базы данных
+        User user = userRepository.findById(userId).orElse(null);
+
+        // Проверяем, что пользователь существует
+        if (user != null) {
+            // Отвязываем пользователя от куратора
+            user.setCurator(null);
+
+            // Сохраняем изменения (это может быть merge в вашем случае)
+            userRepository.save(user);
+
+            // Удаляем пользователя из базы данных
+            userRepository.delete(user);
+        }
     }
+
 
     public List<User> getAllUsers() {
         return userRepository.findAll();

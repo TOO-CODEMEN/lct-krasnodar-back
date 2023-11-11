@@ -62,7 +62,7 @@ public class User {
     @Column(name = "primary_onboarding")
     private Boolean primaryOnboarding;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "curator_id")
     private Curator curator;
 

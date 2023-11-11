@@ -49,7 +49,7 @@ public class Curator {
     @Column(name = "vk_group_id")
     private Long vkGroupId;
 
-    @OneToMany(mappedBy = "curator", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "curator", fetch = FetchType.EAGER)
     @JsonIgnore
     private List<User> users;
 
