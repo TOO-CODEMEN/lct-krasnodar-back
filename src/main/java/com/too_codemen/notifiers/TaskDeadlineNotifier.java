@@ -1,8 +1,10 @@
 package com.too_codemen.notifiers;
 
 import com.too_codemen.entity.Task;
+import com.too_codemen.entity.User;
 import com.too_codemen.service.EmailService;
 import com.too_codemen.service.TaskService;
+import com.too_codemen.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -23,6 +25,9 @@ public class TaskDeadlineNotifier {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private UserService userService;
+
     @Scheduled(fixedRate = 43200)
     public void notifyUsersAboutTaskDeadline() {
         List<Task> tasks = taskService.getAllTasks();
@@ -37,19 +42,45 @@ public class TaskDeadlineNotifier {
         }
     }
 
-    @Scheduled(fixedRate = 43200)
-    public void finishTask() {
+    @Scheduled(fixedRate = 3600)
+    public void finishUserTask() {
         List<Task> tasks = taskService.getAllTasks();
         for (Task task : tasks) {
-            if (task.getStatus() == false) {
-                if (isTaskDeadlineApproaching(task.getDeadline())) {
-                    emailService.sendNotification(task.getUser().getEmail(), "Задание завершено",
-                            "Дедлайн для задания '" + task.getName() + "' прошел.");
-                    task.setStatus(true);
-                    taskService.updateTask(task.getId(), task);
+            if (task.getUser() != null) {
+                if (task.getStatus() == false) {
+                    if (isTaskDeadlineApproaching(task.getDeadline())) {
+                        emailService.sendNotification(task.getUser().getEmail(), "Задание завершено",
+                                "Дедлайн для задания '" + task.getName() + "' прошел.");
+                        task.setStatus(true);
+                        User user = task.getUser();
+                        int existingFailedTasks = user.getFailedTasks() + 1;
+                        user.setFailedTasks(existingFailedTasks);
+                        userService.updateUser(user.getId(), user);
+                        taskService.updateTask(task.getId(), task);
+                    }
                 }
             }
+        }
+    }
 
+    @Scheduled(fixedRate = 3600)
+    public void finishCourseTask() {
+        List<Task> tasks = taskService.getAllTasks();
+        for (Task task : tasks) {
+            if (task.getUser() == null) {
+                if (task.getStatus() == false) {
+                    if (isTaskDeadlineApproaching(task.getDeadline())) {
+                        emailService.sendNotification(task.getCourse().getUser().getEmail(), "Задание завершено",
+                                "Дедлайн для задания '" + task.getName() + "' прошел.");
+                        task.setStatus(true);
+                        User user = task.getCourse().getUser();
+                        int existingFailedTasks = user.getFailedTasks() + 1;
+                        user.setFailedTasks(existingFailedTasks);
+                        userService.updateUser(user.getId(), user);
+                        taskService.updateTask(task.getId(), task);
+                    }
+                }
+            }
         }
     }
 

@@ -1,8 +1,10 @@
 package com.too_codemen.notifiers;
 
 import com.too_codemen.entity.Course;
+import com.too_codemen.entity.User;
 import com.too_codemen.service.CourseService;
 import com.too_codemen.service.EmailService;
+import com.too_codemen.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -25,6 +27,9 @@ public class CourseDeadlineNotifier {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private UserService userService;
+
     @Scheduled(fixedRate = 43200)
     public void notifyUsersAboutCourseDeadline() {
         List<Course> courses = courseService.getAllCourses();
@@ -39,7 +44,7 @@ public class CourseDeadlineNotifier {
         }
     }
 
-    @Scheduled(fixedRate = 43200)
+    @Scheduled(fixedRate = 3600)
     public void finishCourse() {
         List<Course> courses = courseService.getAllCourses();
         for (Course course : courses) {
@@ -50,6 +55,10 @@ public class CourseDeadlineNotifier {
                     Instant currentTime = Instant.now();
                     course.setFinishTime(Timestamp.from(currentTime));
                     course.setStatus(true);
+                    User user = course.getUser();
+                    int existingFailedTasks = user.getFailedTasks() + 1;
+                    user.setFailedTasks(existingFailedTasks);
+                    userService.updateUser(user.getId(), user);
                     courseService.updateCourse(course.getId(), course);
                 }
             }
