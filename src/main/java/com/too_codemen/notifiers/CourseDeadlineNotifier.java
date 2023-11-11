@@ -30,7 +30,7 @@ public class CourseDeadlineNotifier {
     @Autowired
     private UserService userService;
 
-    @Scheduled(fixedRate = 43200)
+    @Scheduled(fixedRate = 100000)
     public void notifyUsersAboutCourseDeadline() {
         List<Course> courses = courseService.getAllCourses();
         for (Course course : courses) {
@@ -44,7 +44,7 @@ public class CourseDeadlineNotifier {
         }
     }
 
-    @Scheduled(fixedRate = 3600)
+    @Scheduled(fixedRate = 100000)
     public void finishCourse() {
         List<Course> courses = courseService.getAllCourses();
         for (Course course : courses) {
@@ -54,12 +54,13 @@ public class CourseDeadlineNotifier {
                             "Дедлайн для курса '" + course.getName() + "' прошел.");
                     Instant currentTime = Instant.now();
                     course.setFinishTime(Timestamp.from(currentTime));
-                    course.setStatus(true);
-                    User user = course.getUser();
+                    User user1 = course.getUser();
+                    User user = new User();
+                    user.setId(user1.getId());
+                    user.setFailedTasks(user1.getFailedTasks());
                     Long existingFailedTasks = user.getFailedTasks() + 1;
                     user.setFailedTasks(existingFailedTasks);
                     userService.updateUser(user.getId(), user);
-                    courseService.updateCourse(course.getId(), course);
                 }
             }
 
@@ -73,7 +74,7 @@ public class CourseDeadlineNotifier {
 
         Duration duration = Duration.between(currentTime, deadlineInstant);
 
-        if (duration.getSeconds() <= 0) {
+        if (duration.getSeconds() >= -100 && duration.getSeconds() <= 0) {
             return true;
         } else {
             return false;
@@ -87,7 +88,7 @@ public class CourseDeadlineNotifier {
 
         Duration duration = Duration.between(currentTime, deadlineInstant);
 
-        if (duration.getSeconds() <= 86400) {
+        if (duration.getSeconds() <= 86400 && duration.getSeconds() > 86300) {
             return true;
         } else {
             return false;
