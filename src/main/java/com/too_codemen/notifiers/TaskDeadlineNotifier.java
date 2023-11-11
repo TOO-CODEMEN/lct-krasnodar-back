@@ -51,12 +51,14 @@ public class TaskDeadlineNotifier {
                     if (isTaskDeadlineApproaching(task.getDeadline())) {
                         emailService.sendNotification(task.getUser().getEmail(), "Задание завершено",
                                 "Дедлайн для задания '" + task.getName() + "' прошел.");
-                        task.setStatus(true);
-                        User user = task.getUser();
+//                        task.setStatus(true);
+                        User user1 = task.getUser();
+                        User user = new User();
+                        user.setId(user1.getId());
                         Long existingFailedTasks = user.getFailedTasks() + 1;
                         user.setFailedTasks(existingFailedTasks);
                         userService.updateUser(user.getId(), user);
-                        taskService.updateTask(task.getId(), task);
+//                        taskService.updateTask(task.getId(), task);
                     }
                 }
             }
@@ -72,12 +74,14 @@ public class TaskDeadlineNotifier {
                     if (isTaskDeadlineApproaching(task.getDeadline())) {
                         emailService.sendNotification(task.getCourse().getUser().getEmail(), "Задание завершено",
                                 "Дедлайн для задания '" + task.getName() + "' прошел.");
-                        task.setStatus(true);
-                        User user = task.getCourse().getUser();
+//                        task.setStatus(true);
+                        User user1 = task.getCourse().getUser();
+                        User user = new User();
+                        user.setId(user1.getId());
                         Long existingFailedTasks = user.getFailedTasks() + 1;
                         user.setFailedTasks(existingFailedTasks);
                         userService.updateUser(user.getId(), user);
-                        taskService.updateTask(task.getId(), task);
+//                        taskService.updateTask(task.getId(), task);
                     }
                 }
             }
