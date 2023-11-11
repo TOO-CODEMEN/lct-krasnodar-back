@@ -30,7 +30,7 @@ public class CourseDeadlineNotifier {
     @Autowired
     private UserService userService;
 
-    @Scheduled(fixedRate = 100000)
+    @Scheduled(fixedRate = 50000)
     public void notifyUsersAboutCourseDeadline() {
         List<Course> courses = courseService.getAllCourses();
         for (Course course : courses) {
@@ -44,7 +44,7 @@ public class CourseDeadlineNotifier {
         }
     }
 
-    @Scheduled(fixedRate = 100000)
+    @Scheduled(fixedRate = 50000)
     public void finishCourse() {
         List<Course> courses = courseService.getAllCourses();
         for (Course course : courses) {

@@ -28,7 +28,7 @@ public class TaskDeadlineNotifier {
     @Autowired
     private UserService userService;
 
-    @Scheduled(fixedRate = 100000)
+    @Scheduled(fixedRate = 50000)
     public void notifyUsersAboutTaskDeadline() {
         List<Task> tasks = taskService.getAllTasks();
         for (Task task : tasks) {
@@ -42,7 +42,7 @@ public class TaskDeadlineNotifier {
         }
     }
 
-    @Scheduled(fixedRate = 100000)
+    @Scheduled(fixedRate = 50000)
     public void finishUserTask() {
         List<Task> tasks = taskService.getAllTasks();
         for (Task task : tasks) {
@@ -64,7 +64,7 @@ public class TaskDeadlineNotifier {
         }
     }
 
-    @Scheduled(fixedRate = 100000)
+    @Scheduled(fixedRate = 50000)
     public void finishCourseTask() {
         List<Task> tasks = taskService.getAllTasks();
         for (Task task : tasks) {
