@@ -25,9 +25,9 @@ public class UserDTO {
 
     private String telegram;
 
-    private int completedTask;
+    private Long completedTask;
 
-    private int failedTasks;
+    private Long failedTasks;
 
     private Timestamp startTime;
 
