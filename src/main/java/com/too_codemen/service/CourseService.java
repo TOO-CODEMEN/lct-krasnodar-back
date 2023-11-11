@@ -94,7 +94,6 @@ public class CourseService {
                 .executeUpdate();
     }
 
-
     @Transactional
     public void deleteCourseById(Long id) {
         taskRepository.deleteTaskByCourseId(id);
@@ -135,6 +134,11 @@ public class CourseService {
         }
         if (updatedCourse.getStatus() != null) {
             existingCourse.setStatus(updatedCourse.getStatus());
+            if (existingCourse.getStatus() == true) {
+                emailService.sendNotification(existingCourse.getUser().getCurator().getEmail(),
+                        "Пользователь завершил курс", "Пользователь " + existingCourse.getUser().getName() +
+                                " завершил курс " + existingCourse.getName());
+            }
         }
         if (updatedCourse.getAudience() != null) {
             existingCourse.setAudience(updatedCourse.getAudience());
