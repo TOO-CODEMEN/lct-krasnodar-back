@@ -1,5 +1,6 @@
 package com.too_codemen.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.too_codemen.RoleConverter;
 import lombok.Data;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

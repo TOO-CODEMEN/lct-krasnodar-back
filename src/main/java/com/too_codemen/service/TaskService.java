@@ -64,9 +64,16 @@ public class TaskService {
         }
         if (updatedTask.getStatus() != null) {
             if (updatedTask.getStatus() == true) {
-                emailService.sendNotification(existingTask.getUser().getCurator().getEmail(),
-                        "Пользователь завершил задание", "Пользователь " + existingTask.getUser().getName() +
-                                " завершил задание " + existingTask.getName());
+                if (existingTask.getUser() == null) {
+                    emailService.sendNotification(existingTask.getCourse().getUser().getCurator().getEmail(),
+                            "Пользователь завершил задание", "Пользователь " + existingTask.getUser().getName() +
+                                    " завершил задание " + existingTask.getName());
+                } else {
+                    emailService.sendNotification(existingTask.getUser().getCurator().getEmail(),
+                            "Пользователь завершил задание", "Пользователь " + existingTask.getUser().getName() +
+                                    " завершил задание " + existingTask.getName());
+                }
+
             }
             existingTask.setStatus(updatedTask.getStatus());
         }
