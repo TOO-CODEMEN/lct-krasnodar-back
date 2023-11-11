@@ -69,6 +69,7 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public void deleteUserById(Long userId) {
+        taskRepository.deleteTasksByUserId(userId);
         // Получаем пользователя из базы данных
         User user = userRepository.findById(userId).orElse(null);
 
