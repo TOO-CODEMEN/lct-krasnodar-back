@@ -6,6 +6,7 @@ import com.too_codemen.entity.User;
 import com.too_codemen.repository.CuratorRepository;
 import com.too_codemen.repository.TaskRepository;
 import com.too_codemen.repository.UserRepository;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
