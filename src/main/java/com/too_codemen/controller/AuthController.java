@@ -1,14 +1,12 @@
 package com.too_codemen.controller;
 
-import com.too_codemen.entity.User;
 import com.too_codemen.model.AuthResult;
 import com.too_codemen.model.AuthenticationRequest;
-import com.too_codemen.model.AuthenticationResponse;
+import com.too_codemen.repository.CuratorRepository;
 import com.too_codemen.repository.UserRepository;
 import com.too_codemen.service.JwtTokenUtil;
 import com.too_codemen.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,17 +29,19 @@ public class AuthController {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Autowired UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private CuratorRepository curatorRepository;
 
     @PostMapping("/authenticate")
     public AuthResult createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
         authenticate(authenticationRequest.getEmail(), authenticationRequest.getPassword());
-        User user = userRepository.findByEmail(authenticationRequest.getEmail());
         final UserDetails userDetails = userService.loadUserByUsername(authenticationRequest.getEmail());
         final String token = jwtTokenUtil.generateToken(userDetails);
         AuthResult authResult = new AuthResult();
         authResult.setToken(token);
-        authResult.setUser(user);
         return authResult;
     }
     private void authenticate(String email, String password) throws Exception {
