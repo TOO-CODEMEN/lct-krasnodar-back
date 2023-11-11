@@ -27,9 +27,13 @@ public class TaskService {
     }
 
     public Task save(Task task) {
-        User user = userRepository.findById(task.getUser().getId()).orElse(null);
-        emailService.sendNotification(user.getEmail(), "Вам добавили новую задачу",
-                "Вам добавили новую задачу '" + task.getName() + "' Успейте пройти до " + task.getDeadline());
+        if (task.getUser() != null) {
+            User user = userRepository.findById(task.getUser().getId()).orElse(null);
+            if (user != null) {
+                emailService.sendNotification(user.getEmail(), "Вам добавили новую задачу",
+                        "Вам добавили новую задачу '" + task.getName() + "' Успейте пройти до " + task.getDeadline());
+            }
+        }
         return taskRepository.save(task);
     }
 
