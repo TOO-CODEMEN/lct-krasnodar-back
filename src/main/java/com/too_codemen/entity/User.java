@@ -43,10 +43,10 @@ public class User {
     private String telegram;
 
     @Column(name = "completed_tasks")
-    private int completedTasks;
+    private Long completedTasks;
 
     @Column(name = "failed_tasks")
-    private int failedTasks;
+    private Long failedTasks;
 
     @Column(name = "start_time")
     private Timestamp startTime;

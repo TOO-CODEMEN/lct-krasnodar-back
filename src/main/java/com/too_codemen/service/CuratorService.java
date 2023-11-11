@@ -104,6 +104,9 @@ public class CuratorService {
         if (updatedCurator.getRole() != null) {
             existingCurator.setRole(updatedCurator.getRole());
         }
+        if (updatedCurator.getVkGroupId() != null) {
+            existingCurator.setVkGroupId(updatedCurator.getVkGroupId());
+        }
 
         return curatorRepository.save(existingCurator);
     }
