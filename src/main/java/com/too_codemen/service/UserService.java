@@ -1,7 +1,9 @@
 package com.too_codemen.service;
 
 import com.too_codemen.CustomUserDetails;
+import com.too_codemen.entity.Curator;
 import com.too_codemen.entity.User;
+import com.too_codemen.repository.CuratorRepository;
 import com.too_codemen.repository.TaskRepository;
 import com.too_codemen.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,9 @@ public class UserService implements UserDetailsService {
     private TaskRepository taskRepository;
 
     @Autowired
+    private CuratorRepository curatorRepository;
+
+    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
@@ -47,7 +52,10 @@ public class UserService implements UserDetailsService {
 
 
     public User saveUser(User user) {
-        emailService.sendNotification(user.getEmail(), "Ваши данные для входа", "Ваш логин: " + user.getEmail() + " Ваш пароль: " + user.getPassword());
+        Curator curator = curatorRepository.findById(user.getCurator().getId()).orElse(null);
+        emailService.sendNotification(user.getEmail(), "Ваши данные для входа", "Ваш логин: "
+                + user.getEmail() + " Ваш пароль: " + user.getPassword() + " Ваш куратор: " + curator.getSurname() +
+                " " + curator.getName() + " " + curator.getPatronymic() + " Почта для связи: " + curator.getEmail());
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
         return userRepository.save(user);
@@ -100,6 +108,12 @@ public class UserService implements UserDetailsService {
         }
         if (updatedUser.getPrimaryOnboarding() != null) {
             existingUser.setPrimaryOnboarding(updatedUser.getPrimaryOnboarding());
+        }
+        if (updatedUser.getStartTime() != null) {
+            existingUser.setStartTime(updatedUser.getStartTime());
+        }
+        if (updatedUser.getFinishTime() != null) {
+            existingUser.setFinishTime(updatedUser.getFinishTime());
         }
 
         return userRepository.save(existingUser);

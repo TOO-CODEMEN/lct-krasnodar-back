@@ -1,14 +1,9 @@
 package com.too_codemen.controller;
 
-import com.too_codemen.entity.Course;
-import com.too_codemen.entity.Material;
-import com.too_codemen.entity.Task;
-import com.too_codemen.entity.User;
+import com.too_codemen.entity.*;
 import com.too_codemen.model.CourseRequest;
-import com.too_codemen.service.CourseService;
-import com.too_codemen.service.MaterialService;
-import com.too_codemen.service.TaskService;
-import com.too_codemen.service.UserService;
+import com.too_codemen.model.CuratorRequest;
+import com.too_codemen.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,10 +27,11 @@ public class AdminController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private CuratorService curatorService;
+
     @PostMapping("/courses/saveCourse")
     public Course saveCourse(@RequestBody CourseRequest course) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(authentication);
         return courseService.saveCourse(course);
     }
     @DeleteMapping("/courses/deleteCourseById/{id}")
@@ -88,5 +84,33 @@ public class AdminController {
         return userService.updateUser(id, user);
     }
 
+    @PostMapping("/curators/saveCurator")
+    public Curator saveCurator(@RequestBody Curator curatorRequest) {
+        return curatorService.saveCurator(curatorRequest);
+    }
 
+    @DeleteMapping("/curators/deleteCuratorById/{id}")
+    public void deleteCuratorById(@PathVariable Long id) {
+        curatorService.deleteCuratorById(id);
+    }
+
+    @GetMapping("/curators/getAllCurators")
+    public List<Curator> getAllCurators() {
+        return curatorService.getAllCurators();
+    }
+
+    @GetMapping("/curators/showCuratorInfo/{email}")
+    public Curator showCuratorInfo(@PathVariable String email) {
+        return curatorService.showCuratorInfo(email);
+    }
+
+    @PatchMapping("/curators/updateCuratorById/{id}")
+    public Curator updateCuratorById(@PathVariable Long id, @RequestBody Curator curator) {
+        return curatorService.updateCurator(id, curator);
+    }
+
+    @GetMapping("/curators/getUsersByCuratorId/{id}")
+    public List<User> getUsersByCuratorId(@PathVariable Long id) {
+        return curatorService.getUsersByCuratorId(id);
+    }
 }

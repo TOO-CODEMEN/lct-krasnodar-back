@@ -1,21 +1,21 @@
 package com.too_codemen.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.too_codemen.RoleConverter;
 import lombok.Data;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
-
 
 @Data
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "curators")
+public class Curator {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+    @Column(name = "curator_id")
     private Long id;
 
     @Column(name = "name")
@@ -42,27 +42,15 @@ public class User {
     @Column(name = "telegram")
     private String telegram;
 
-    @Column(name = "completed_tasks")
-    private int completedTasks;
-
-    @Column(name = "failed_tasks")
-    private int failedTasks;
-
-    @Column(name = "start_time")
-    private Timestamp startTime;
-
-    @Column(name = "finish_time")
-    private Timestamp finishTime;
-
     @Column(name = "role")
     @Convert(converter = RoleConverter.class)
     private Role role;
 
-    @Column(name = "primary_onboarding")
-    private Boolean primaryOnboarding;
+    @Column(name = "vk_group_id")
+    private Long vkGroupId;
 
-    @ManyToOne
-    @JoinColumn(name = "curator_id")
-    private Curator curator;
+    @OneToMany(mappedBy = "curator", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    private List<User> users;
 
 }
