@@ -79,11 +79,6 @@ public class AdminController {
         return userService.getAllUsers();
     }
 
-    @PatchMapping("/users/updateUser/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody User user) {
-        return userService.updateUser(id, user);
-    }
-
     @PostMapping("/curators/saveCurator")
     public Curator saveCurator(@RequestBody Curator curatorRequest) {
         return curatorService.saveCurator(curatorRequest);
