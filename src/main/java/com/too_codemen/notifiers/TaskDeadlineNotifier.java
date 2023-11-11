@@ -28,12 +28,12 @@ public class TaskDeadlineNotifier {
     @Autowired
     private UserService userService;
 
-    @Scheduled(fixedRate = 43200)
+    @Scheduled(fixedRate = 100000)
     public void notifyUsersAboutTaskDeadline() {
         List<Task> tasks = taskService.getAllTasks();
         for (Task task : tasks) {
             if (task.getStatus() == false) {
-                if (isTaskDeadline(task.getDeadline())) {
+                if (isTaskDeadlineApproaching(task.getDeadline())) {
                     emailService.sendNotification(task.getUser().getEmail(), "Приближается дедлайн задачи",
                             "Дедлайн для задачи '" + task.getName() + "' приближается.");
                 }
@@ -42,30 +42,29 @@ public class TaskDeadlineNotifier {
         }
     }
 
-    @Scheduled(fixedRate = 3600)
+    @Scheduled(fixedRate = 100000)
     public void finishUserTask() {
         List<Task> tasks = taskService.getAllTasks();
         for (Task task : tasks) {
             if (task.getUser() != null) {
                 if (task.getStatus() == false) {
-                    if (isTaskDeadlineApproaching(task.getDeadline())) {
+                    if (isTaskDeadline(task.getDeadline())) {
                         emailService.sendNotification(task.getUser().getEmail(), "Задание завершено",
                                 "Дедлайн для задания '" + task.getName() + "' прошел.");
-//                        task.setStatus(true);
                         User user1 = task.getUser();
                         User user = new User();
                         user.setId(user1.getId());
+                        user.setFailedTasks(user1.getFailedTasks());
                         Long existingFailedTasks = user.getFailedTasks() + 1;
                         user.setFailedTasks(existingFailedTasks);
                         userService.updateUser(user.getId(), user);
-//                        taskService.updateTask(task.getId(), task);
                     }
                 }
             }
         }
     }
 
-    @Scheduled(fixedRate = 3600)
+    @Scheduled(fixedRate = 100000)
     public void finishCourseTask() {
         List<Task> tasks = taskService.getAllTasks();
         for (Task task : tasks) {
@@ -74,14 +73,13 @@ public class TaskDeadlineNotifier {
                     if (isTaskDeadlineApproaching(task.getDeadline())) {
                         emailService.sendNotification(task.getCourse().getUser().getEmail(), "Задание завершено",
                                 "Дедлайн для задания '" + task.getName() + "' прошел.");
-//                        task.setStatus(true);
                         User user1 = task.getCourse().getUser();
                         User user = new User();
                         user.setId(user1.getId());
+                        user.setFailedTasks(user1.getFailedTasks());
                         Long existingFailedTasks = user.getFailedTasks() + 1;
                         user.setFailedTasks(existingFailedTasks);
                         userService.updateUser(user.getId(), user);
-//                        taskService.updateTask(task.getId(), task);
                     }
                 }
             }
@@ -95,7 +93,7 @@ public class TaskDeadlineNotifier {
 
         Duration duration = Duration.between(currentTime, deadlineInstant);
 
-        if (duration.getSeconds() <= 0) {
+        if (duration.getSeconds() >= -100 && duration.getSeconds() <= 0) {
             return true;
         } else {
             return false;
@@ -109,7 +107,7 @@ public class TaskDeadlineNotifier {
 
         Duration duration = Duration.between(currentTime, deadlineInstant);
 
-        if (duration.getSeconds() <= 86400) {
+        if (duration.getSeconds() <= 86400 && duration.getSeconds() > 86300) {
             return true;
         } else {
             return false;
